@@ -1,9 +1,12 @@
+use serde::{Deserialize, Serialize};
+
 use crate::event::EventHandler;
 use crate::map::{Map, MapTile};
 use crate::player::Player;
 
+#[derive(Serialize, Deserialize)]
 pub enum GameEventInput {
-    PlayerInput(usize, &'static str),
+    PlayerInput(usize, String),
 }
 
 // Container for every data in the game
@@ -40,7 +43,7 @@ where
 
     pub fn handle_event(&mut self, evt: GameEventInput) -> Result<(), H::Error> {
         match evt {
-            GameEventInput::PlayerInput(id, inp) => self.handler.handle(id, inp, &mut self.map)?,
+            GameEventInput::PlayerInput(id, inp) => self.handler.handle(id, inp.as_str(), &mut self.map)?,
         }
         Ok(())
     }

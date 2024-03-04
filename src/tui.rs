@@ -76,7 +76,7 @@ impl Terminal {
                 (y + 1).try_into().expect("map y overflow u16"),
             ))?;
             write!(self.stdout, "{VERT_LINE_LEFT}")?;
-            map.write_line(y, &mut self.stdout)?;
+            map.write_line_to_stdout(y, &mut self.stdout)?;
             write!(self.stdout, "{VERT_LINE_RIGHT}")?;
         }
 

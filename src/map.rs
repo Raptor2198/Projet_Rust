@@ -1,4 +1,5 @@
 use std::io::Write;
+use std::io::Stdout;
 
 use crate::player::{PlayerDirection, PlayerMapData};
 
@@ -6,6 +7,9 @@ pub trait MapTile: Copy {
     fn init() -> Self
     where
         Self: Sized;
+    fn write_stdout(&self, stdout: &mut Stdout) -> Result<(), std::io::Error> {
+        self.repr(stdout)
+    }
     fn repr<W: Write>(&self, buffer: &mut W) -> Result<(), std::io::Error>;
     fn set_player(&mut self, direction: PlayerDirection);
     fn walkable(&self) -> bool;
@@ -42,7 +46,7 @@ where
         }
     }
 
-    pub fn write_line<W: Write>(&self, y: usize, buffer: &mut W) -> Result<(), std::io::Error> {
+    pub fn write_line_to_stdout(&self, y: usize, buffer: &mut Stdout) -> Result<(), std::io::Error> {
         // Get the line
         self.map
             .get(y)
@@ -50,7 +54,7 @@ where
             // Iterate over every tile on it
             .iter()
             // For each tile, call the `repr` function on the buffer
-            .map(|t| t.repr(buffer))
+            .map(|t| t.write_stdout(buffer))
             // Collect the return types
             //    `Result<(), std::io::Error>` into a Vec<Result<(), std::io::Error>>`
             .collect()

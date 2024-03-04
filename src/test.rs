@@ -128,10 +128,10 @@ pub fn main() {
         {
             if let Event::Key(k) = evt {
                 let evt = match k.code {
-                    KeyCode::Left => Some(GameEventInput::PlayerInput(id_1, "left")),
-                    KeyCode::Right => Some(GameEventInput::PlayerInput(id_1, "right")),
-                    KeyCode::Up => Some(GameEventInput::PlayerInput(id_1, "up")),
-                    KeyCode::Down => Some(GameEventInput::PlayerInput(id_1, "down")),
+                    KeyCode::Left => Some(GameEventInput::PlayerInput(id_1, "left".to_string())),
+                    KeyCode::Right => Some(GameEventInput::PlayerInput(id_1, "right".to_string())),
+                    KeyCode::Up => Some(GameEventInput::PlayerInput(id_1, "up".to_string())),
+                    KeyCode::Down => Some(GameEventInput::PlayerInput(id_1, "down".to_string())),
                     KeyCode::Char('q') => break,
                     _ => None,
                 };
