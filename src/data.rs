@@ -9,7 +9,7 @@ pub enum DataError {
     BincodeSerialization(bincode::Error),
     IoError(std::io::Error),
 }
-
+df
 impl From<bincode::Error> for DataError {
     fn from(value: bincode::Error) -> Self {
         DataError::BincodeSerialization(value)
