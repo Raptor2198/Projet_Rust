@@ -16,6 +16,7 @@ impl From<bincode::Error> for DataError {
     }
 }
 
+
 impl From<std::io::Error> for DataError {
     fn from(value: std::io::Error) -> Self {
         DataError::IoError(value)
