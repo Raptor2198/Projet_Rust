@@ -1,12 +1,11 @@
-pub mod event;
-pub mod game;
-pub mod map;
-pub mod player;
-pub mod tui;
-pub mod data;
+mod server;
+mod game;
+mod player;
+mod ui;
+mod util;
+mod test;
 
-pub mod test;
-
-pub fn main() {
-    test::main();
+fn main() {
+    // Lancer le serveur de jeu
+    server::run();
 }
