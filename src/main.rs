@@ -1,11 +1,8 @@
-mod server;
-mod game;
+pub mod game;
 mod player;
-mod ui;
-mod util;
-mod test;
+pub mod util;
+mod server;
 
 fn main() {
-    // Lancer le serveur de jeu
     server::run();
 }

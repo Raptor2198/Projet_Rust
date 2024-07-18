@@ -1,14 +1,24 @@
-use std::io::{self, BufRead, BufReader, Write};
+use crate::game::Game;
+use crate::util::{broadcast_message, handle_server_message};
+use serde::{Deserialize, Serialize};
+use std::io::{BufRead, BufReader, Write};
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
-use crate::game::Game;
+
+#[derive(Serialize, Deserialize)]
+pub enum ClientMessage {
+    Join(String),
+    Guess(u32),
+    VoteDifficulty(Difficulty),
+    RequestScores,
+}
 
 pub fn handle_client(mut stream: TcpStream, game: Arc<Mutex<Game>>) {
     let mut reader = BufReader::new(stream.try_clone().unwrap());
 
     write!(stream, "Entrez votre pseudo: ").unwrap();
     stream.flush().unwrap();
-    
+
     let mut player_name = String::new();
     reader.read_line(&mut player_name).unwrap();
     let player_name = player_name.trim().to_string();
@@ -37,12 +47,12 @@ pub fn handle_client(mut stream: TcpStream, game: Arc<Mutex<Game>>) {
                 let result: String = {
                     let mut game = game.lock().unwrap();
                     match game.guess(&player_name, guess) {
-                        Ok(message) => message.to_string(),
-                        Err(message) => message.to_string(),
+                        Ok(msg) => msg.to_string(),
+                        Err(_) => "Erreur lors de la supposition".to_string(),
                     }
                 };
 
-                write!(stream, "{}\nEntrez une nouvelle supposition: ", result).unwrap();
+                write!(stream, "{}\n", result).unwrap();
                 stream.flush().unwrap();
 
                 if result == "Vous avez gagné!" {
@@ -50,10 +60,17 @@ pub fn handle_client(mut stream: TcpStream, game: Arc<Mutex<Game>>) {
                 }
             }
             Err(_) => {
-                write!(stream, "Erreur de lecture de l'entrée.").unwrap();
-                stream.flush().unwrap();
+                eprintln!("Error reading from client.");
                 break;
             }
         }
+    }
+
+    {
+        let mut game = game.lock().unwrap();
+        game.update_high_scores();
+        let scores = game.get_scores();
+        write!(stream, "Scores actuels:\n{}", scores).unwrap();
+        stream.flush().unwrap();
     }
 }

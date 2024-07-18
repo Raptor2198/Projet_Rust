@@ -111,6 +111,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "dotenv"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77c90badedccf4105eca100756a0b1289e191f6fcbdadd3cee1d2f614f97da8f"
+
+[[package]]
 name = "getrandom"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -128,17 +134,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e0242819d153cba4b4b05a5a8f2a7e9bbf97b6055b2a002b395c96b5ff3c0222"
 dependencies = [
  "cfg-if",
-]
-
-[[package]]
-name = "jeu_du_plus_ou_moins"
-version = "0.1.0"
-dependencies = [
- "bincode",
- "crossbeam",
- "crossterm",
- "rand",
- "serde",
 ]
 
 [[package]]
@@ -192,6 +187,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c28774a7fd2fbb4f0babd8237ce554b73af68021b5f695a3cebd6c59bac0980f"
 dependencies = [
  "winapi",
+]
+
+[[package]]
+name = "number_game"
+version = "0.1.0"
+dependencies = [
+ "bincode",
+ "crossbeam",
+ "crossterm",
+ "dotenv",
+ "rand",
+ "serde",
 ]
 
 [[package]]
