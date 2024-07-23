@@ -1,6 +1,6 @@
-pub mod game;
+mod game;
 mod player;
-pub mod util;
+mod util;
 mod server;
 
 fn main() {

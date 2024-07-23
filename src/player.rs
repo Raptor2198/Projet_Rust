@@ -21,17 +21,22 @@ impl Player {
 mod tests {
     use super::*;
 
+    // Test pour la création d'un joueur
     #[test]
     fn test_player_creation() {
         let player = Player::new("TestPlayer".to_string());
+        // Vérifie que le nom du joueur est correct
         assert_eq!(player.name, "TestPlayer");
+        // Vérifie que le score initial est 0
         assert_eq!(player.score, 0);
     }
 
+    // Test pour incrémenter le score d'un joueur
     #[test]
     fn test_increment_score() {
         let mut player = Player::new("TestPlayer".to_string());
         player.increment_score();
+        // Vérifie que le score est incrémenté de 1
         assert_eq!(player.score, 1);
     }
 }
