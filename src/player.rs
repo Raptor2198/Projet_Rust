@@ -1,3 +1,5 @@
+//ce fichier player.rs a été créé pour encapsuler la logique des joueurs, mais qu'il n'a pas encore été intégré ou utilisé dans les autres parties du code pour l'instant.
+
 #[derive(Debug)]
 pub struct Player {
     pub name: String,

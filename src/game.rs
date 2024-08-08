@@ -3,6 +3,7 @@ use rand::Rng;
 use serde::{Serialize, Deserialize};
 use std::time::{Instant, Duration};
 
+// Enumération représentant les niveaux de difficulté possibles du jeu.
 #[derive(Clone, Copy, Serialize, Deserialize, Debug, Eq, Hash, PartialEq)]
 pub enum Difficulty {
     Easy,
@@ -10,116 +11,130 @@ pub enum Difficulty {
     Hard,
 }
 
+// Structure représentant l'état du jeu.
 pub struct Game {
-    pub players: HashMap<String, u32>,
-    secret_number: u32,
-    pub difficulty: Difficulty,
-    high_scores: Vec<(String, u32)>,
-    difficulty_votes: HashMap<Difficulty, u32>,
-    start_time: Option<Instant>,
-    pub phase: GamePhase,
+    pub players: HashMap<String, u32>, // Liste des joueurs et leurs scores respectifs.
+    secret_number: u32, // Nombre secret que les joueurs doivent deviner.
+    pub difficulty: Difficulty, // Niveau de difficulté actuel du jeu.
+    high_scores: Vec<(String, u32)>, // Liste des meilleurs scores.
+    difficulty_votes: HashMap<Difficulty, u32>, // Votes pour déterminer la difficulté.
+    start_time: Option<Instant>, // Instant où le jeu a commencé (utilisé pour gérer le timing des phases).
+    pub phase: GamePhase, // Phase actuelle du jeu.
 }
 
+// Enumération représentant les différentes phases du jeu.
 #[derive(Clone, Copy, Serialize, Deserialize, Debug, Eq, Hash, PartialEq)]
 pub enum GamePhase {
-    Identification,
-    Voting,
-    Playing,
+    Identification, // Phase où les joueurs rejoignent le jeu.
+    Voting, // Phase où les joueurs votent pour la difficulté.
+    Playing, // Phase où les joueurs jouent (devinent le nombre secret).
 }
 
 impl Game {
+    // Fonction de création d'un nouvel état de jeu.
     pub fn new() -> Game {
         Game {
-            players: HashMap::new(),
-            secret_number: rand::thread_rng().gen_range(1..101),
-            difficulty: Difficulty::Easy,
-            high_scores: vec![],
-            difficulty_votes: HashMap::new(),
-            start_time: None,
-            phase: GamePhase::Identification,
+            players: HashMap::new(), // Initialise la liste des joueurs.
+            secret_number: rand::thread_rng().gen_range(1..101), // Génère un nombre secret aléatoire entre 1 et 100.
+            difficulty: Difficulty::Easy, // Définit la difficulté par défaut à "Facile".
+            high_scores: vec![], // Initialise la liste des meilleurs scores.
+            difficulty_votes: HashMap::new(), // Initialise la carte des votes de difficulté.
+            start_time: None, // Aucun moment de début tant que le jeu n'a pas commencé.
+            phase: GamePhase::Identification, // Le jeu commence dans la phase d'identification.
         }
     }
 
+    // Ajoute un joueur au jeu.
     pub fn add_player(&mut self, name: String) {
-        self.players.insert(name, 0);
+        self.players.insert(name, 0); // Le score initial du joueur est de 0.
     }
 
+    // Retire un joueur du jeu.
     pub fn remove_player(&mut self, name: &str) {
-        self.players.remove(name);
+        self.players.remove(name); // Retire le joueur de la liste des joueurs.
     }
     
+    // Gère la tentative de devinette d'un joueur.
     pub fn guess(&mut self, player_name: &str, guess: u32) -> Result<&'static str, ()> {
-        if self.phase != GamePhase::Playing {
+        if self.phase != GamePhase::Playing { // Les devinettes ne sont acceptées que pendant la phase de jeu.
             return Err(());
         }
-        let hint = if guess < self.secret_number {
+        let hint = if guess < self.secret_number { // Si la devinette est inférieure au nombre secret.
             "C’est plus"
-        } else if guess > self.secret_number {
+        } else if guess > self.secret_number { // Si la devinette est supérieure au nombre secret.
             "C’est moins"
-        } else {
-            self.players.insert(player_name.to_string(), guess);
-            self.high_scores.push((player_name.to_string(), guess));
+        } else { // Si la devinette est correcte.
+            self.players.insert(player_name.to_string(), guess); // Met à jour le score du joueur.
+            self.high_scores.push((player_name.to_string(), guess)); // Ajoute le joueur à la liste des meilleurs scores.
             "Vous avez gagné!"
         };
-        Ok(hint)
+        Ok(hint) // Retourne l'indice (ou le message de victoire).
     }
 
+    // Définit la difficulté du jeu et ajuste la plage du nombre secret en conséquence.
     pub fn set_difficulty(&mut self, difficulty: Difficulty) {
         self.difficulty = difficulty;
         match difficulty {
-            Difficulty::Easy => self.secret_number = rand::thread_rng().gen_range(1..101),
-            Difficulty::Medium => self.secret_number = rand::thread_rng().gen_range(1..501),
-            Difficulty::Hard => self.secret_number = rand::thread_rng().gen_range(1..1001),
+            Difficulty::Easy => self.secret_number = rand::thread_rng().gen_range(1..101), // Facile: 1 à 100.
+            Difficulty::Medium => self.secret_number = rand::thread_rng().gen_range(1..501), // Moyen: 1 à 500.
+            Difficulty::Hard => self.secret_number = rand::thread_rng().gen_range(1..1001), // Difficile: 1 à 1000.
         }
     }
 
+    // Permet aux joueurs de voter pour la difficulté.
     pub fn vote_difficulty(&mut self, difficulty: Difficulty) {
-        let count = self.difficulty_votes.entry(difficulty).or_insert(0);
+        let count = self.difficulty_votes.entry(difficulty).or_insert(0); // Incrémente le nombre de votes pour la difficulté choisie.
         *count += 1;
     }
 
+    // Détermine la difficulté finale basée sur les votes des joueurs.
     pub fn determine_difficulty(&mut self) {
         let mut max_votes = 0;
         let mut selected_difficulty = Difficulty::Easy;
 
         for (&difficulty, &votes) in &self.difficulty_votes {
-            if votes > max_votes {
+            if votes > max_votes { // Sélectionne la difficulté avec le plus de votes.
                 max_votes = votes;
                 selected_difficulty = difficulty;
-            } else if votes == max_votes {
+            } else if votes == max_votes { // En cas d'égalité, sélection aléatoire entre les options en tête.
                 if rand::thread_rng().gen_bool(0.5) {
                     selected_difficulty = difficulty;
                 }
             }
         }
 
-        self.set_difficulty(selected_difficulty);
+        self.set_difficulty(selected_difficulty); // Applique la difficulté déterminée.
     }
 
+    // Démarre la phase de vote.
     pub fn start_voting_phase(&mut self) {
-        self.phase = GamePhase::Voting;
-        self.start_time = Some(Instant::now());
+        self.phase = GamePhase::Voting; // Passe à la phase de vote.
+        self.start_time = Some(Instant::now()); // Enregistre le moment de début de cette phase.
     }
 
+    // Vérifie si la phase de vote est terminée (basée sur le countdown).
     pub fn check_voting_phase(&self) -> bool {
         if let Some(start_time) = self.start_time {
-            return start_time.elapsed() >= Duration::new(20, 0);
+            return start_time.elapsed() >= Duration::new(20, 0); // Vérifie si 20 secondes se sont écoulées depuis le début de la phase de vote.
         }
         false
     }
 
+    // Démarre la phase de jeu après le vote.
     pub fn start_game_phase(&mut self) {
-        self.phase = GamePhase::Playing;
-        self.start_time = None;
+        self.phase = GamePhase::Playing; // Passe à la phase de jeu.
+        self.start_time = None; // Réinitialise le temps de début.
     }
 
+    // Termine le jeu et réinitialise l'état.
     pub fn end_game(&mut self) {
-        self.start_time = None;
-        self.players.clear();
-        self.difficulty_votes.clear();
-        self.phase = GamePhase::Identification;
+        self.start_time = None; // Réinitialise le temps de début.
+        self.players.clear(); // Vide la liste des joueurs.
+        self.difficulty_votes.clear(); // Vide les votes de difficulté.
+        self.phase = GamePhase::Identification; // Reviens à la phase d'identification.
     }
 }
+
 
 //Tests unitaires
 
