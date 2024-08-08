@@ -1,4 +1,4 @@
-Number Game
+                                                                                                 Number Game
  
 Description :
 "Number Game" est un jeu multijoueur en réseau où plusieurs joueurs devinent un nombre secret en recevant des indices "C'est plus" ou "C'est moins". 
@@ -6,7 +6,6 @@ Le jeu propose trois niveaux de difficulté : facile, moyen et difficile, que le
 
 
 Démarrage : 
-
 -Pour lancer le serveur:
     cargo run --bin server
 
@@ -24,8 +23,9 @@ Fonctionnalités actuelles :
 Avancement:
 Plusieurs fonctionnalités ont déja été développés et je pense à ajouter un tableau de score dans le futur et une liste de joueurs(quelques-uns des warnings sont dues à des améliorations pas fini mais encore en cours de développement). Un système de récompenses pourraient également être mis en places. player.rs a été créer pour encapsuler la logique des joeurs mais n'est pas encore utilisé dans les uatres parties du code pour l'instant. Dans les prochaines mise à jours, il sera utilisé.
 
+
 Architecture du code : 
-                              Structure des fichiers
+                                                       Structure des fichiers
 client.rs : Contient la logique du client, y compris la gestion de la connexion au serveur, l'envoi et la réception des messages.
 
 game.rs : Contient la logique du jeu, y compris la gestion des joueurs, des devinettes, des votes de difficulté, etc.
@@ -42,8 +42,7 @@ Cargo.toml : Fichier de configuration des dépendancesdu projet.
 
 
 
-                       Explication et justification des choix effectués
-
+                                                      Explication et justification des choix effectués
 Pourquoi Rust et pas un autre language pour ce projet ?
 Pour sa gestion de la concurrence qui permet d'assurer une communication fluide et efficace entre le serveur et les clients.
 
@@ -68,12 +67,10 @@ Lorsqu'un nouveau client se connecte, un nouveau thread est créé pour gérer l
 Chaque thread individuel s'occupe de la logique de jeu pour chaque joueur.Chaque thread fonctionne indépendamment, ce qui signifie que chaque joueur peut jouer à son propre rythme sans affecter les autres. Si un joueur fait une pause ou réfléchit longtemps avant de faire un guess, les autres joueurs peuvent continuer à jouer sans interruption.
 
 - Compte à Rebours(Countdown) du Vote de Difficulté :
-
 Un thread séparé est utilisé pour gérer le compte à rebours de la phase de vote. Cela permet de vérifier régulièrement si le temps de vote est écoulé et de démarrer la phase de jeu. Ce mécanisme est implémenté dans server.rs, dans la boucle principale du thread de gestion du jeu.
 
 
 Pourquoi le choix d'utilisation du multithreading pour le projet ?  ==> Meilleure performance, excellente réactivité,  et expérience utilisateur fluide.
-
 - Meilleure performance: 
 Le multithreading permet au serveur de traiter plusieurs connexions en même temps. Cela signifie que lorsque plusieurs joueurs se connectent, le serveur peut répondre à chacun d'eux sans délai.
 
@@ -84,8 +81,7 @@ Chaque joueur a sa propre "thread" (fil d'exécution). Cela signifie que le jeu 
 En séparant les tâches dans différents threads, nous assurons que les actions comme la lecture des entrées réseau ou les temporisations n'interfèrent pas entre elles. Chaque joueur obtient une réponse rapide.
 
 
-Gestion des erreurs
-
+Gestion des erreurs ==>
 Connexion au serveur : Un message d'erreur est affiché si le client ne parvient pas à se connecter au serveur.
 
 Sérialisation/Désérialisation : Les erreurs de sérialisation et de désérialisation des messages sont capturées et traitées avec des messages d'erreur appropriés.
