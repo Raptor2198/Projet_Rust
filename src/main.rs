@@ -1,12 +1,9 @@
-pub mod event;
-pub mod game;
-pub mod map;
-pub mod player;
-pub mod tui;
-pub mod data;
+mod game;
+mod player;
+mod util;
+mod server;
 
-pub mod test;
-
-pub fn main() {
-    test::main();
+fn main() {
+    // Le point d'entrée du programme. Le serveur est démarré ici.
+    server::run();
 }

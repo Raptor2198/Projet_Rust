@@ -1,54 +1,44 @@
-use crate::map::MapTile;
+//ce fichier player.rs a été créé pour encapsuler la logique des joueurs, mais qu'il n'a pas encore été intégré ou utilisé dans les autres parties du code pour l'instant.
 
-#[derive(Clone, Copy)]
-pub enum PlayerDirection {
-    North,
-    South,
-    East,
-    West,
+#[derive(Debug)]
+pub struct Player {
+    pub name: String,
+    pub score: u32,
 }
 
-impl PlayerDirection {
-    // Decide of a display direction depending on a movement
-    pub fn from_move(x: isize, y: isize) -> Option<PlayerDirection> {
-        if x < 0 {
-            Some(PlayerDirection::West)
-        } else if y < 0 {
-            Some(PlayerDirection::North)
-        } else if x > 0 {
-            Some(PlayerDirection::East)
-        } else if y > 0 {
-            Some(PlayerDirection::South)
-        } else {
-            None
-        }
+impl Player {
+    // Crée un nouveau joueur avec un nom et un score initial de 0
+    pub fn new(name: String) -> Player {
+        Player { name, score: 0 }
+    }
+
+    // Incrémente le score du joueur
+    pub fn increment_score(&mut self) {
+        self.score += 1;
     }
 }
 
-// Struct containing map-related metadata about a player
-pub struct PlayerMapData<T: MapTile> {
-    pub coord: (usize, usize),
-    tile_under: T,
-    pub direction: PlayerDirection,
-}
+// Tests unitaires pour le module player
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-impl<T: MapTile> PlayerMapData<T> {
-    pub fn init(tile_under: T, coord: (usize, usize)) -> PlayerMapData<T> {
-        PlayerMapData {
-            coord,
-            tile_under,
-            direction: PlayerDirection::North, // Some default direction
-        }
+    // Test pour la création d'un joueur
+    #[test]
+    fn test_player_creation() {
+        let player = Player::new("TestPlayer".to_string());
+        // Vérifie que le nom du joueur est correct
+        assert_eq!(player.name, "TestPlayer");
+        // Vérifie que le score initial est 0
+        assert_eq!(player.score, 0);
     }
 
-    pub fn replace_tile_under(&mut self, new_tile: T) -> T {
-        std::mem::replace(&mut self.tile_under, new_tile)
+    // Test pour incrémenter le score d'un joueur
+    #[test]
+    fn test_increment_score() {
+        let mut player = Player::new("TestPlayer".to_string());
+        player.increment_score();
+        // Vérifie que le score est incrémenté de 1
+        assert_eq!(player.score, 1);
     }
-}
-
-// Trait containing every behavior expected from a Player
-pub trait Player {
-    fn init(id: usize) -> Self
-    where
-        Self: Sized;
 }
