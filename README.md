@@ -1,4 +1,4 @@
-                                                                       # Number Game
+                                                                       Number Game
  
 Description :
 "Number Game" est un jeu multijoueur en réseau où plusieurs joueurs devinent un nombre secret en recevant des indices "C'est plus" ou "C'est moins". 
@@ -25,7 +25,7 @@ Plusieurs fonctionnalités ont déja été développés et je pense à ajouter u
 
 
 Architecture du code : 
-                                                       ## Structure des fichiers
+                                                       ** Structure des fichiers
 client.rs : Contient la logique du client, y compris la gestion de la connexion au serveur, l'envoi et la réception des messages.
 
 game.rs : Contient la logique du jeu, y compris la gestion des joueurs, des devinettes, des votes de difficulté, etc.
