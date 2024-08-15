@@ -6,16 +6,16 @@ Démarrage :
 - Pour lancer le serveur:
     cargo run --bin server
 
--Pour lancer un client(plusieurs clients peuvent etre lancées avec plusieurs terminales):
+- Pour lancer un client(plusieurs clients peuvent etre lancées avec plusieurs terminales):
     cargo run --bin client
 
 
 Fonctionnalités actuelles :
--Multijoueur avec un serveur multithread
--Choix du niveau de difficulté par vote (facile, moyen, difficile)
--Indices pour aider à deviner le nombre secret
--Phases de jeu claires : phase d'identification, phase de vote(un countdown inclus), phase de jeu(phase où on fait les guess)
--Tests unitaires pour les principales fonctionnalités.
+- Multijoueur avec un serveur multithread
+- Choix du niveau de difficulté par vote (facile, moyen, difficile)
+- Indices pour aider à deviner le nombre secret
+- Phases de jeu claires : phase d'identification, phase de vote(un countdown inclus), phase de jeu(phase où on fait les guess)
+- Tests unitaires pour les principales fonctionnalités.
 
 Avancement:
 Plusieurs fonctionnalités ont déja été développés et je pense à ajouter un tableau de score dans le futur et une liste de joueurs(quelques-uns des warnings sont dues à des améliorations pas fini mais encore en cours de développement). Un système de récompenses pourraient également être mis en places. player.rs a été créer pour encapsuler la logique des joeurs mais n'est pas encore utilisé dans les uatres parties du code pour l'instant. Dans les prochaines mise à jours, il sera utilisé.
