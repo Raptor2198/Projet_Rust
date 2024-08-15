@@ -1,4 +1,4 @@
-                                                                      # Number Game
+                                                                      #Number Game
  
 Description :
 "Number Game" est un jeu multijoueur en réseau où plusieurs joueurs devinent un nombre secret en recevant des indices "C'est plus" ou "C'est moins". 
