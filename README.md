@@ -21,8 +21,7 @@
 Plusieurs fonctionnalités ont déja été développés et je pense à ajouter un tableau de score dans le futur et une liste de joueurs(quelques-uns des warnings sont dues à des améliorations pas fini mais encore en cours de développement). Un système de récompenses pourraient également être mis en places. player.rs a été créer pour encapsuler la logique des joeurs mais n'est pas encore utilisé dans les uatres parties du code pour l'instant. Dans les prochaines mise à jours, il sera utilisé.
 
 
-#### Architecture du code : 
-##### Structure des fichiers
+#### Architecture du code (Structure des fichiers)
 client.rs : Contient la logique du client, y compris la gestion de la connexion au serveur, l'envoi et la réception des messages.
 
 game.rs : Contient la logique du jeu, y compris la gestion des joueurs, des devinettes, des votes de difficulté, etc.
