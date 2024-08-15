@@ -3,7 +3,7 @@
 "Number Game" est un jeu multijoueur en réseau où plusieurs joueurs devinent un nombre secret en recevant des indices "C'est plus" ou "C'est moins". Le jeu propose trois niveaux de difficulté : facile, moyen et difficile, que les joueurs peuvent voter avant de commencer à jouer.y
 
 Démarrage : 
--Pour lancer le serveur:
+- Pour lancer le serveur:
     cargo run --bin server
 
 -Pour lancer un client(plusieurs clients peuvent etre lancées avec plusieurs terminales):
