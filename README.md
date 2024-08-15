@@ -22,7 +22,7 @@ Plusieurs fonctionnalités ont déja été développés et je pense à ajouter u
 
 
 Architecture du code : 
-## Structure des fichiers
+### Structure des fichiers
 client.rs : Contient la logique du client, y compris la gestion de la connexion au serveur, l'envoi et la réception des messages.
 
 game.rs : Contient la logique du jeu, y compris la gestion des joueurs, des devinettes, des votes de difficulté, etc.
@@ -39,7 +39,7 @@ Cargo.toml : Fichier de configuration des dépendancesdu projet.
 
 
 
-                                                      Explication et justification des choix effectués
+### Explication et justification des choix effectuées
 Pourquoi Rust et pas un autre language pour ce projet ?
 Pour sa gestion de la concurrence qui permet d'assurer une communication fluide et efficace entre le serveur et les clients.
 
